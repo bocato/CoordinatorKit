@@ -8,13 +8,9 @@
 
 import Foundation
 
-/// An enum that defines an output to be passed on from
+/// An enum that defines an event to be passed on from
 /// a child to it's parents over the responders Chain
-public protocol CoordinatorOutput {}
-
-/// An enum that defines an input to be passed on from
-/// the parent to it's childs
-public protocol CoordinatorInput {}
+public protocol CoordinatorEvent {}
 
 /// Defines a delegate to pass the outputs in the responder chain
 public protocol CoordinatorDelegate: AnyObject {
@@ -55,19 +51,19 @@ public protocol CoordinatorType: AnyObject {
     /// - Parameters:
     ///   - child: the child that has sent the output
     ///   - output: the output that was sent, it needs to conform with CoordinatorOutput
-    func receiveOutput(from child: CoordinatorType, output: CoordinatorOutput)
+    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType)
     
     //
     // MARK: - Input Operations
     //
     
-    /// Receives an input from it's parent
+    /// Receives an event from the parent
     ///
     /// - Parameters:
     ///   - input: the output that was sent, it needs to conform with CoordinatorInput
     ///
     /// - Note: This needs to be overriden in order to intercept the inputs from the parent
-    func receiveInput(_ input: CoordinatorInput)
+    func receiveEvent(_ event: CoordinatorEvent)
     
 }
 
@@ -111,81 +107,74 @@ public extension CoordinatorType {
         completion?()
     }
     
-    // MARK: - Output Operations
+    // MARK: - Events
     
-    /// Default implementation, in order to guarantee that the output is passed on
+    /// Default implementation, in order to guarantee that the event is passed on
     ///
-    /// - Parameter output: the desired output to be sent
-    func sendOutputToParent(_ output: CoordinatorOutput) {
-        parent?.receiveOutput(from: self, output: output)
+    /// - Parameter event: the desired event to be sent
+    func sendEventToParent(_ event: CoordinatorEvent) {
+        parent?.receiveEvent(event, from: self)
     }
     
-    /// Default implementation, in order to guarantee that the output is passed on.
-    /// This needs to be overriden in order to intercept the outputs on the parents
+    /// Default implementation, in order to guarantee that the event is passed on.
+    /// This needs to be overriden in order to intercept the events on the parents
     ///
     /// - Parameters:
+    ///   - event: the event that was sent
     ///   - child: the child that has sent the output
-    ///   - output: the output that was sent..
     ///
     /// - Example:
-    ///    `func receiveOutput(from child: Coordinator, output: CoordinatorOutput) {
-    ///        switch (child, output) {
-    ///        case let (coordinator as SomeCoordinator, output as SomeCoordinator.Output):
-    ///            switch output {
-    ///            case .someOutput:
+    ///    `func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) {
+    ///        switch (event, child) {
+    ///        case let (event as SomeCoordinator.Event, child as SomeCoordinator):
+    ///            switch event {
+    ///            case .someEvent:
     ///                // DO SOMETHING...
-    ///                sendOutputToParent(output) // Pass it on if needed, or not...
+    ///                sendEventToParent(event) // Pass it on if needed, or not...
     ///            }
     ///        default: return
     ///        }
     ///    }`
     ///
-    func receiveOutput(from child: CoordinatorType, output: CoordinatorOutput) {
-        parent?.receiveOutput(from: self, output: output)
+    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) {
+        parent?.receiveEvent(event, from: self)
     }
     
-    // MARK: - Input Operations
-    
-    /// Sends an input to a designated Child
+    /// Sends an event to a designated Child
     ///
     /// - Parameters:
+    ///   - event: a desired event to be sent, it needs to conform with CoordinatorEvent
     ///   - childIdentifier: the child coordinator
-    ///   - input: a desired input object to be sent, it needs to conform with CoordinatorOutput
-    func sendInputToChild(_ childIdentifier: String, input: CoordinatorInput) throws {
+    func sendEvent(_ event: CoordinatorEvent, toChildWithIdentifier childIdentifier: String) throws {
         guard let childToSendTheInput = children?.first(where: { $0.identifier == childIdentifier } ) else {
             throw CoordinatorError.couldNotFindChildFlowWithIdentifier(childIdentifier)
         }
-        childToSendTheInput.receiveInput(input)
+        childToSendTheInput.receiveEvent(event)
     }
     
-    /// Broadcast a designated input to all coordinator children
-    ///
-    /// - Parameter input:
-    func broadcastInputToAllChilds(input: CoordinatorInput) throws {
-        children?.forEach { $0.receiveInput(input) }
+    /// Broadcast a designated event to all coordinator's children
+    func broadcastEvent(_ event: CoordinatorEvent) throws {
+        children?.forEach { $0.receiveEvent(event) }
     }
     
     /// Default implementation, in order to guarantee that the output is passed on.
     /// This needs to be overriden in order to intercept the outputs on the parents
     ///
-    /// - Parameters:
-    ///   - child: the child that has sent the output
-    ///   - output: the output that was sent..
-    ///
     /// - Example:
-    ///    `override func receiveInput(_ input: CoordinatorInput) {
-    ///        switch (input) {
+    ///    `override func receiveEvent(_ event: CoordinatorEvent) {
+    ///        switch (event) {
     ///        case .someInput:
     ///        // DO SOMETHING
     ///        }
     ///    }`
     ///
-    func receiveInput(_ input: CoordinatorInput) {
-        debugPrint("\(input) was received from \(parent?.identifier ?? "nobody")")
+    func receiveEvent(_ event: CoordinatorEvent) {
+        debugPrint("\(event) was received from \(parent?.identifier ?? "nobody")")
     }
     
     // MARK: - Helpers
     
+    /// NOTE: - This should be overriden in case you need to use dynamic identifiers.
     var identifier: String {
         return String(describing: type(of: self))
     }
