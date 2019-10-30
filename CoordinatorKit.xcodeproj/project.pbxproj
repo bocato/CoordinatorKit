@@ -8,8 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		E516E5B82369B469006620B1 /* CoordinatorKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E516E5AE2369B469006620B1 /* CoordinatorKit.framework */; };
-		E516E5BD2369B469006620B1 /* CoordinatorKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5BC2369B469006620B1 /* CoordinatorKitTests.swift */; };
 		E516E5BF2369B469006620B1 /* CoordinatorKit.h in Headers */ = {isa = PBXBuildFile; fileRef = E516E5B12369B469006620B1 /* CoordinatorKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E516E5CD2369B498006620B1 /* CommonCoordinatorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5CA2369B497006620B1 /* CommonCoordinatorTypes.swift */; };
+		E516E5CE2369B498006620B1 /* CoordinatorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5CB2369B498006620B1 /* CoordinatorType.swift */; };
+		E516E5CF2369B498006620B1 /* CoordinatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5CC2369B498006620B1 /* CoordinatorError.swift */; };
+		E516E5D42369B554006620B1 /* CoordinatorErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5D32369B554006620B1 /* CoordinatorErrorTests.swift */; };
+		E516E5D72369B7FD006620B1 /* FatalErrorUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5D62369B7FD006620B1 /* FatalErrorUtil.swift */; };
+		E516E5DA2369B833006620B1 /* XCTestCase+FatalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5D92369B833006620B1 /* XCTestCase+FatalError.swift */; };
+		E516E5DC2369B88F006620B1 /* CommonCoordinatorTypesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5DB2369B88F006620B1 /* CommonCoordinatorTypesTests.swift */; };
+		E516E5DF2369BA7C006620B1 /* CoordinatorTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E516E5DE2369BA7C006620B1 /* CoordinatorTypeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,8 +34,15 @@
 		E516E5B12369B469006620B1 /* CoordinatorKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoordinatorKit.h; sourceTree = "<group>"; };
 		E516E5B22369B469006620B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E516E5B72369B469006620B1 /* CoordinatorKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoordinatorKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E516E5BC2369B469006620B1 /* CoordinatorKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorKitTests.swift; sourceTree = "<group>"; };
 		E516E5BE2369B469006620B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E516E5CA2369B497006620B1 /* CommonCoordinatorTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonCoordinatorTypes.swift; sourceTree = "<group>"; };
+		E516E5CB2369B498006620B1 /* CoordinatorType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatorType.swift; sourceTree = "<group>"; };
+		E516E5CC2369B498006620B1 /* CoordinatorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatorError.swift; sourceTree = "<group>"; };
+		E516E5D32369B554006620B1 /* CoordinatorErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorErrorTests.swift; sourceTree = "<group>"; };
+		E516E5D62369B7FD006620B1 /* FatalErrorUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatalErrorUtil.swift; sourceTree = "<group>"; };
+		E516E5D92369B833006620B1 /* XCTestCase+FatalError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FatalError.swift"; sourceTree = "<group>"; };
+		E516E5DB2369B88F006620B1 /* CommonCoordinatorTypesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCoordinatorTypesTests.swift; sourceTree = "<group>"; };
+		E516E5DE2369BA7C006620B1 /* CoordinatorTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTypeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +85,8 @@
 		E516E5B02369B469006620B1 /* CoordinatorKit */ = {
 			isa = PBXGroup;
 			children = (
-				E516E5B12369B469006620B1 /* CoordinatorKit.h */,
-				E516E5B22369B469006620B1 /* Info.plist */,
+				E516E5C82369B474006620B1 /* Sources */,
+				E516E5C92369B47B006620B1 /* Resources */,
 			);
 			path = CoordinatorKit;
 			sourceTree = "<group>";
@@ -80,10 +94,73 @@
 		E516E5BB2369B469006620B1 /* CoordinatorKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				E516E5BC2369B469006620B1 /* CoordinatorKitTests.swift */,
-				E516E5BE2369B469006620B1 /* Info.plist */,
+				E516E5D02369B521006620B1 /* Sources */,
+				E516E5D12369B526006620B1 /* Resources */,
 			);
 			path = CoordinatorKitTests;
+			sourceTree = "<group>";
+		};
+		E516E5C82369B474006620B1 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E516E5D52369B7EB006620B1 /* Util */,
+				E516E5CC2369B498006620B1 /* CoordinatorError.swift */,
+				E516E5CB2369B498006620B1 /* CoordinatorType.swift */,
+				E516E5CA2369B497006620B1 /* CommonCoordinatorTypes.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		E516E5C92369B47B006620B1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E516E5B12369B469006620B1 /* CoordinatorKit.h */,
+				E516E5B22369B469006620B1 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E516E5D02369B521006620B1 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E516E5D82369B816006620B1 /* Util */,
+				E516E5D22369B538006620B1 /* Tests */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		E516E5D12369B526006620B1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E516E5BE2369B469006620B1 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E516E5D22369B538006620B1 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E516E5D32369B554006620B1 /* CoordinatorErrorTests.swift */,
+				E516E5DB2369B88F006620B1 /* CommonCoordinatorTypesTests.swift */,
+				E516E5DE2369BA7C006620B1 /* CoordinatorTypeTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		E516E5D52369B7EB006620B1 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				E516E5D62369B7FD006620B1 /* FatalErrorUtil.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		E516E5D82369B816006620B1 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				E516E5D92369B833006620B1 /* XCTestCase+FatalError.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,9 +225,11 @@
 				TargetAttributes = {
 					E516E5AD2369B469006620B1 = {
 						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1100;
 					};
 					E516E5B62369B469006620B1 = {
 						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1100;
 					};
 				};
 			};
@@ -195,6 +274,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E516E5CE2369B498006620B1 /* CoordinatorType.swift in Sources */,
+				E516E5CD2369B498006620B1 /* CommonCoordinatorTypes.swift in Sources */,
+				E516E5CF2369B498006620B1 /* CoordinatorError.swift in Sources */,
+				E516E5D72369B7FD006620B1 /* FatalErrorUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,7 +285,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E516E5BD2369B469006620B1 /* CoordinatorKitTests.swift in Sources */,
+				E516E5DC2369B88F006620B1 /* CommonCoordinatorTypesTests.swift in Sources */,
+				E516E5DA2369B833006620B1 /* XCTestCase+FatalError.swift in Sources */,
+				E516E5DF2369BA7C006620B1 /* CoordinatorTypeTests.swift in Sources */,
+				E516E5D42369B554006620B1 /* CoordinatorErrorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,14 +426,16 @@
 		E516E5C32369B469006620B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = YKYJK8YBGT;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = CoordinatorKit/Info.plist;
+				INFOPLIST_FILE = CoordinatorKit/Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -356,6 +444,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bocato.CoordinatorKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -364,14 +453,16 @@
 		E516E5C42369B469006620B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = YKYJK8YBGT;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = CoordinatorKit/Info.plist;
+				INFOPLIST_FILE = CoordinatorKit/Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -388,9 +479,11 @@
 		E516E5C62369B469006620B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YKYJK8YBGT;
-				INFOPLIST_FILE = CoordinatorKitTests/Info.plist;
+				INFOPLIST_FILE = CoordinatorKitTests/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -398,6 +491,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bocato.CoordinatorKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -406,9 +500,11 @@
 		E516E5C72369B469006620B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YKYJK8YBGT;
-				INFOPLIST_FILE = CoordinatorKitTests/Info.plist;
+				INFOPLIST_FILE = CoordinatorKitTests/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
