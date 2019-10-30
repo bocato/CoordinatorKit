@@ -84,7 +84,7 @@ final class CoordinatorTypeTests: XCTestCase {
         XCTAssertEqual(sut.children?.count, 0, "Expected `children.count` to be `0`.")
     }
     
-    func test_dettachChild_shouldFailt_forInvalidChildIdentifier() {
+    func test_dettachChild_shouldFail_forInvalidChildIdentifier() {
         // Given
         let sut: CoordinatorType = CoordinatorTypeMock()
         
@@ -108,6 +108,40 @@ final class CoordinatorTypeTests: XCTestCase {
             return
         }
     }
+    
+//    func test_whenSentEventToParentIsCalled_parentShouldReceiveTheExpectedEvent() {
+//        // Given
+//        let parent = CoordinatorSpy()
+//        let child = CoordinatorTypeMock()
+//        try? parent.attachChild(child)
+//
+//        let event = CoordinatorEventMock()
+//
+//        // When
+//        try? child.sendEventToParent(event)
+//
+//        // Then
+//        XCTAssertTrue(parent.receiveEventFromChildCalled, "`receiveEvent(:from:)` should have been called on the parent.")
+//        XCTAssertTrue(parent.eventPassedToReceiveEventFromChild is CoordinatorEventMock, "Expected `CoordinatorEventMock`, but got \(String(describing: parent.eventPassedToReceiveEventFromChild)).")
+//
+//    }
+
+//    func test_receiveEventFromChild_shouldThrowFatalError_ifNotOverriden() {
+//        // Given
+//        let parent = CoordinatorSpy()
+//        let child = CoordinatorTypeMock()
+//        try? parent.attachChild(child)
+//
+//        let event = CoordinatorEventMock()
+//
+//        // When
+//        try? child.sendEventToParent(event)
+//
+//        // Then
+//        XCTAssertTrue(parent.receiveEventFromChildCalled, "`receiveEvent(:from:)` should have been called on the parent.")
+//        XCTAssertTrue(parent.eventPassedToReceiveEventFromChild is CoordinatorEventMock, "Expected `CoordinatorEventMock`, but got \(String(describing: parent.eventPassedToReceiveEventFromChild)).")
+//
+//    }
     
 }
 
@@ -138,20 +172,26 @@ private final class CoordinatorDelegateSpy: CoordinatorDelegate {
     
 }
 
-//private final class CoordinatorSpy: CoordinatorType {
-//    
-//    var coordinatorDelegate: CoordinatorDelegate?
-//    var parent: CoordinatorType?
-//    var children: [CoordinatorType]? = []
-//    
-//    private(set) var startCalled = false
-//    func start() {
-//        startCalled = true
-//    }
-//    
-//    private(set) var receiveOutputCalled = false
-//    private(set) childPassed
-//    func receiveOutput(from child: CoordinatorType, output: CoordinatorOutput) {
-//        
-//    }
-//}
+private final class CoordinatorSpy: CoordinatorType {
+
+    var coordinatorDelegate: CoordinatorDelegate?
+    var parent: CoordinatorType?
+    var children: [CoordinatorType]? = []
+
+    private(set) var startCalled = false
+    func start() {
+        startCalled = true
+    }
+
+    private(set) var receiveEventFromChildCalled = false
+    private(set) var eventPassedToReceiveEventFromChild: CoordinatorEvent?
+    private(set) var childPassed: CoordinatorType?
+    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) {
+        receiveEventFromChildCalled = true
+        eventPassedToReceiveEventFromChild = event
+        childPassed = child
+    }
+    
+}
+
+private struct CoordinatorEventMock: CoordinatorEvent {}

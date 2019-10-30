@@ -41,30 +41,28 @@ public protocol CoordinatorType: AnyObject {
     
     /// Starts the integration flow and calls registerViewControllerBuilders() to do it
     func start()
+}
+
+public protocol EventBasedCoordinator: CoordinatorType {
     
-    //
-    // MARK: - Output Operations
-    //
+    // MARK: - Event Listeners
     
     /// Receives an output from it's parent
     ///
     /// - Parameters:
+    ///   - event: the event that was sent
     ///   - child: the child that has sent the output
-    ///   - output: the output that was sent, it needs to conform with CoordinatorOutput
-    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType)
-    
-    //
-    // MARK: - Input Operations
-    //
+    ///
+    /// - Note: This needs to be overriden in order to intercept the inputs from the parent
+    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) throws
     
     /// Receives an event from the parent
     ///
     /// - Parameters:
-    ///   - input: the output that was sent, it needs to conform with CoordinatorInput
+    ///   - event: the event that was sent, it needs to conform with CoordinatorEvent
     ///
     /// - Note: This needs to be overriden in order to intercept the inputs from the parent
-    func receiveEvent(_ event: CoordinatorEvent)
-    
+    func receiveEventFromParent(_ event: CoordinatorEvent) throws
 }
 
 public extension CoordinatorType {
@@ -84,6 +82,7 @@ public extension CoordinatorType {
     ///   - child: the child to be attached
     ///   - completion: the completion handler to be called after attaching it
     /// - Returns: Void
+    
     func attachChild(_ child: CoordinatorType, completion: (() -> ())? = nil) throws {
         if children?.first(where: { $0.identifier == child.identifier }) != nil {
             throw CoordinatorError.duplicatedChildFlow
@@ -107,16 +106,35 @@ public extension CoordinatorType {
         completion?()
     }
     
-    // MARK: - Events
+    // MARK: - Events Senders
     
     /// Default implementation, in order to guarantee that the event is passed on
     ///
     /// - Parameter event: the desired event to be sent
-    func sendEventToParent(_ event: CoordinatorEvent) {
-        parent?.receiveEvent(event, from: self)
+    func sendEventToParent(_ event: CoordinatorEvent) throws {
+        try parent?.receiveEvent(event, from: self)
     }
     
-    /// Default implementation, in order to guarantee that the event is passed on.
+    /// Sends an event to a designated Child
+    ///
+    /// - Parameters:
+    ///   - event: a desired event to be sent, it needs to conform with CoordinatorEvent
+    ///   - childIdentifier: the child coordinator
+    func sendEvent(_ event: CoordinatorEvent, toChildWithIdentifier childIdentifier: String) throws {
+        guard let childToSendTheInput = children?.first(where: { $0.identifier == childIdentifier } ) else {
+            throw CoordinatorError.couldNotFindChildFlowWithIdentifier(childIdentifier)
+        }
+        try childToSendTheInput.receiveEventFromParent(event)
+    }
+    
+    /// Broadcast a designated event to all coordinator's children
+    func broadcastEvent(_ event: CoordinatorEvent) throws {
+        try children?.forEach { try $0.receiveEventFromParent(event) }
+    }
+    
+    // MARK: - Event Receivers
+    
+    /// Default implementation, so the user don't have to implement it unless it is needed.
     /// This needs to be overriden in order to intercept the events on the parents
     ///
     /// - Parameters:
@@ -136,28 +154,11 @@ public extension CoordinatorType {
     ///        }
     ///    }`
     ///
-    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) {
-        parent?.receiveEvent(event, from: self)
+    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) throws {
+        throw CoordinatorError.receiveEventFromChildNotImplementedOnCoordinator(identifier)
     }
     
-    /// Sends an event to a designated Child
-    ///
-    /// - Parameters:
-    ///   - event: a desired event to be sent, it needs to conform with CoordinatorEvent
-    ///   - childIdentifier: the child coordinator
-    func sendEvent(_ event: CoordinatorEvent, toChildWithIdentifier childIdentifier: String) throws {
-        guard let childToSendTheInput = children?.first(where: { $0.identifier == childIdentifier } ) else {
-            throw CoordinatorError.couldNotFindChildFlowWithIdentifier(childIdentifier)
-        }
-        childToSendTheInput.receiveEvent(event)
-    }
-    
-    /// Broadcast a designated event to all coordinator's children
-    func broadcastEvent(_ event: CoordinatorEvent) throws {
-        children?.forEach { $0.receiveEvent(event) }
-    }
-    
-    /// Default implementation, in order to guarantee that the output is passed on.
+    /// Default implementation, so the user don't have to implement it unless it is needed.
     /// This needs to be overriden in order to intercept the outputs on the parents
     ///
     /// - Example:
@@ -168,8 +169,8 @@ public extension CoordinatorType {
     ///        }
     ///    }`
     ///
-    func receiveEvent(_ event: CoordinatorEvent) {
-        debugPrint("\(event) was received from \(parent?.identifier ?? "nobody")")
+    func receiveEventFromParent(_ event: CoordinatorEvent) throws {
+        throw CoordinatorError.receiveEventFromParentNotImplementedOnCoordinator(identifier)
     }
     
     // MARK: - Helpers

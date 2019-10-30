@@ -94,7 +94,8 @@
 		E516E5BB2369B469006620B1 /* CoordinatorKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				E516E5D02369B521006620B1 /* Sources */,
+				E516E5D82369B816006620B1 /* Util */,
+				E516E5D22369B538006620B1 /* Tests */,
 				E516E5D12369B526006620B1 /* Resources */,
 			);
 			path = CoordinatorKitTests;
@@ -118,15 +119,6 @@
 				E516E5B22369B469006620B1 /* Info.plist */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		E516E5D02369B521006620B1 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				E516E5D82369B816006620B1 /* Util */,
-				E516E5D22369B538006620B1 /* Tests */,
-			);
-			path = Sources;
 			sourceTree = "<group>";
 		};
 		E516E5D12369B526006620B1 /* Resources */ = {
