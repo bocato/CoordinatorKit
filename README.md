@@ -19,7 +19,7 @@ Then:
 
 Example:
 ```swift
-private final class MyCoordinator: CoordinatorType {
+final class MyCoordinator: CoordinatorType {
 
     // MARK: - Properties
     
@@ -44,7 +44,7 @@ private final class MyCoordinator: CoordinatorType {
 Example:
 
 ```swift
-private final class MyCoordinator: CoordinatorType, EventReceivingCoordinator {
+final class MyCoordinator: CoordinatorType, EventReceivingCoordinator {
 
     // MARK: - Properties
     
