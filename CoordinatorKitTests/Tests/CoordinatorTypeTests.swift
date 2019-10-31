@@ -109,39 +109,137 @@ final class CoordinatorTypeTests: XCTestCase {
         }
     }
     
-//    func test_whenSentEventToParentIsCalled_parentShouldReceiveTheExpectedEvent() {
-//        // Given
-//        let parent = CoordinatorSpy()
-//        let child = CoordinatorTypeMock()
-//        try? parent.attachChild(child)
-//
-//        let event = CoordinatorEventMock()
-//
-//        // When
-//        try? child.sendEventToParent(event)
-//
-//        // Then
-//        XCTAssertTrue(parent.receiveEventFromChildCalled, "`receiveEvent(:from:)` should have been called on the parent.")
-//        XCTAssertTrue(parent.eventPassedToReceiveEventFromChild is CoordinatorEventMock, "Expected `CoordinatorEventMock`, but got \(String(describing: parent.eventPassedToReceiveEventFromChild)).")
-//
-//    }
+    func test_whenSendEventToParentIsCalled_parentShouldReceiveTheExpectedEvent() {
+        // Given
+        let parent = CoordinatorSpy()
+        let child = CoordinatorTypeMock()
+        try? parent.attachChild(child)
 
-//    func test_receiveEventFromChild_shouldThrowFatalError_ifNotOverriden() {
-//        // Given
-//        let parent = CoordinatorSpy()
-//        let child = CoordinatorTypeMock()
-//        try? parent.attachChild(child)
-//
-//        let event = CoordinatorEventMock()
-//
-//        // When
-//        try? child.sendEventToParent(event)
-//
-//        // Then
-//        XCTAssertTrue(parent.receiveEventFromChildCalled, "`receiveEvent(:from:)` should have been called on the parent.")
-//        XCTAssertTrue(parent.eventPassedToReceiveEventFromChild is CoordinatorEventMock, "Expected `CoordinatorEventMock`, but got \(String(describing: parent.eventPassedToReceiveEventFromChild)).")
-//
-//    }
+        let event = CoordinatorEventMock()
+
+        // When
+        do {
+            try child.sendEventToParent(event)
+        } catch {
+            XCTFail("`sendEventToParent` failed!")
+        }
+
+        // Then
+        XCTAssertTrue(parent.receiveEventFromChildCalled, "`receiveEvent(:from:)` should have been called on the parent.")
+        XCTAssertTrue(parent.eventPassedToReceiveEventFromChild is CoordinatorEventMock, "Expected `CoordinatorEventMock`, but got \(String(describing: parent.eventPassedToReceiveEventFromChild)).")
+
+    }
+
+    func test_whenSendEventToParentIsCalled_andReceiverIsNotEventReceivingCoordinator_itShouldThrowTheExpecteError() {
+        // Given
+        let parent = CoordinatorTypeMock()
+        let child = OtherCoordinatorTypeMock()
+        try? parent.attachChild(child)
+
+        let event = CoordinatorEventMock()
+
+        // When
+        var errorThrown: CoordinatorError?
+        do {
+            try child.sendEventToParent(event)
+            XCTFail("Expected throw error, but it didn't happen.")
+        } catch {
+            guard let coordinatorError = error as? CoordinatorError else {
+                XCTFail("Expected a `CoordinatorError`.")
+                return
+            }
+            errorThrown = coordinatorError
+        }
+        
+        // Then
+        XCTAssertNotNil(errorThrown, "Expected an error, but got nil.")
+        guard case .coordinatorIsNotAnEventReceiver = errorThrown else {
+            XCTFail("Expected `coordinatorIsNotAnEventReceiver` error, but got \(String(describing: errorThrown)).")
+            return
+        }
+    }
+    
+    func test_whenSendEventToChild_isSendToAnInvalidChildIdentifier_itShouldThrowTheExpectedError() {
+        // Given
+        let parent = CoordinatorTypeMock()
+        let child = CoordinatorSpy()
+        try? parent.attachChild(child)
+
+        let event = CoordinatorEventMock()
+        let invalidChildIdentifier = "InvalidIdentifier"
+
+        // When
+        var errorThrown: CoordinatorError?
+        do {
+            try parent.sendEvent(event, toChildWithIdentifier: invalidChildIdentifier)
+            XCTFail("Expected throw error, but it didn't happen.")
+        } catch {
+            guard let coordinatorError = error as? CoordinatorError else {
+                XCTFail("Expected a `CoordinatorError`.")
+                return
+            }
+            errorThrown = coordinatorError
+        }
+        
+        // Then
+        XCTAssertNotNil(errorThrown, "Expected an error, but got nil.")
+        guard case let .couldNotFindChildFlowWithIdentifier(identifier) = errorThrown else {
+            XCTFail("Expected `coordinatorIsNotAnEventReceiver` error, but got \(String(describing: errorThrown)).")
+            return
+        }
+        XCTAssertEqual(invalidChildIdentifier, identifier, "Expected \(invalidChildIdentifier), but got \(identifier).")
+
+    }
+    
+    func test_whenSendEventToChild_childShouldReceiveTheExpectedEvent() {
+        // Given
+        let parent = CoordinatorTypeMock()
+        let child = CoordinatorSpy()
+        try? parent.attachChild(child)
+
+        let event = CoordinatorEventMock()
+
+        // When
+        do {
+            try parent.sendEvent(event, toChildWithIdentifier: child.identifier)
+        } catch {
+            XCTFail("`sendEvent(:toChildWithIdentifier:)` failed!")
+        }
+
+        // Then
+        XCTAssertTrue(child.receiveEventFromParentCalled, "`receiveEvent()` should have been called on the child.")
+        XCTAssertTrue(child.eventPassedToReceiveEventFromParent is CoordinatorEventMock, "Expected `CoordinatorEventMock`, but got \(String(describing: child.eventPassedToReceiveEventFromParent)).")
+
+    }
+    
+    func test_whenSendEventToChild_andReceiverIsNotEventReceivingCoordinator_itShouldThrowTheExpecteError() {
+        // Given
+        let parent = CoordinatorTypeMock()
+        let child = CoordinatorTypeMock()
+        try? parent.attachChild(child)
+
+        let event = CoordinatorEventMock()
+
+        // When
+        var errorThrown: CoordinatorError?
+        do {
+            try parent.sendEvent(event, toChildWithIdentifier: child.identifier)
+            XCTFail("Expected throw error, but it didn't happen.")
+        } catch {
+            guard let coordinatorError = error as? CoordinatorError else {
+                XCTFail("Expected a `CoordinatorError`.")
+                return
+            }
+            errorThrown = coordinatorError
+        }
+        
+        // Then
+        XCTAssertNotNil(errorThrown, "Expected an error, but got nil.")
+        guard case .coordinatorIsNotAnEventReceiver = errorThrown else {
+            XCTFail("Expected `coordinatorIsNotAnEventReceiver` error, but got \(String(describing: errorThrown)).")
+            return
+        }
+    }
     
 }
 
@@ -152,6 +250,8 @@ private final class CoordinatorTypeMock: CoordinatorType {
     var parent: CoordinatorType?
     var children: [CoordinatorType]? = []
     func start() {}
+    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) throws {}
+    func receiveEventFromParent(_ event: CoordinatorEvent) throws {}
 }
 
 private final class OtherCoordinatorTypeMock: CoordinatorType {
@@ -172,7 +272,7 @@ private final class CoordinatorDelegateSpy: CoordinatorDelegate {
     
 }
 
-private final class CoordinatorSpy: CoordinatorType {
+private final class CoordinatorSpy: CoordinatorType, EventReceivingCoordinator {
 
     var coordinatorDelegate: CoordinatorDelegate?
     var parent: CoordinatorType?
@@ -190,6 +290,13 @@ private final class CoordinatorSpy: CoordinatorType {
         receiveEventFromChildCalled = true
         eventPassedToReceiveEventFromChild = event
         childPassed = child
+    }
+    
+    private(set) var receiveEventFromParentCalled = false
+    private(set) var eventPassedToReceiveEventFromParent: CoordinatorEvent?
+    func receiveEventFromParent(_ event: CoordinatorEvent) throws {
+        receiveEventFromParentCalled = true
+        eventPassedToReceiveEventFromParent = event
     }
     
 }

@@ -25,11 +25,11 @@ final class CoordinatorTypesTest: XCTestCase {
 
 // MARK: - Testing Helpers
 private final class ApplicationCoordinatorTypeMock: ApplicationCoordinatorType {
-    
     var coordinatorDelegate: CoordinatorDelegate?
     var parent: CoordinatorType?
     var children: [CoordinatorType]?
     
     func start() {}
-    
+    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) throws {}
+    func receiveEventFromParent(_ event: CoordinatorEvent) throws {}
 }

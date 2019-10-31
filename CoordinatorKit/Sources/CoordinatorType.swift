@@ -43,7 +43,7 @@ public protocol CoordinatorType: AnyObject {
     func start()
 }
 
-public protocol EventBasedCoordinator: CoordinatorType {
+public protocol EventReceivingCoordinator: CoordinatorType {
     
     // MARK: - Event Listeners
     
@@ -53,7 +53,20 @@ public protocol EventBasedCoordinator: CoordinatorType {
     ///   - event: the event that was sent
     ///   - child: the child that has sent the output
     ///
-    /// - Note: This needs to be overriden in order to intercept the inputs from the parent
+    /// - Example:
+    ///    `func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) {
+    ///        switch (event, child) {
+    ///        case let (event as SomeCoordinator.Event, child as SomeCoordinator):
+    ///            switch event {
+    ///            case .someEvent:
+    ///                // DO SOMETHING...
+    ///                sendEventToParent(event) // Pass it on if needed, or not...
+    ///            }
+    ///        default: return
+    ///        }
+    ///    }`
+    ///
+    /// - Note: This needs to be implemented/overriden in order to intercept the inputs from the parent
     func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) throws
     
     /// Receives an event from the parent
@@ -61,7 +74,15 @@ public protocol EventBasedCoordinator: CoordinatorType {
     /// - Parameters:
     ///   - event: the event that was sent, it needs to conform with CoordinatorEvent
     ///
-    /// - Note: This needs to be overriden in order to intercept the inputs from the parent
+    /// - Example:
+    ///    `func receiveEventFromParent(_ event: CoordinatorEvent) {
+    ///        switch (event) {
+    ///        case .someInput:
+    ///        // DO SOMETHING
+    ///        }
+    ///    }`
+    ///
+    /// - Note: This needs to be implemented/overriden in order to intercept the inputs from the parent
     func receiveEventFromParent(_ event: CoordinatorEvent) throws
 }
 
@@ -127,11 +148,6 @@ public extension CoordinatorType {
         try childToSendTheInput.receiveEventFromParent(event)
     }
     
-    /// Broadcast a designated event to all coordinator's children
-    func broadcastEvent(_ event: CoordinatorEvent) throws {
-        try children?.forEach { try $0.receiveEventFromParent(event) }
-    }
-    
     // MARK: - Event Receivers
     
     /// Default implementation, so the user don't have to implement it unless it is needed.
@@ -155,14 +171,17 @@ public extension CoordinatorType {
     ///    }`
     ///
     func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) throws {
-        throw CoordinatorError.receiveEventFromChildNotImplementedOnCoordinator(identifier)
+        guard let eventReceiver = self as? EventReceivingCoordinator else {
+            throw CoordinatorError.coordinatorIsNotAnEventReceiver(identifier)
+        }
+        try eventReceiver.receiveEvent(event, from: child)
     }
     
     /// Default implementation, so the user don't have to implement it unless it is needed.
     /// This needs to be overriden in order to intercept the outputs on the parents
     ///
     /// - Example:
-    ///    `override func receiveEvent(_ event: CoordinatorEvent) {
+    ///    `func receiveEventFromParent(_ event: CoordinatorEvent) {
     ///        switch (event) {
     ///        case .someInput:
     ///        // DO SOMETHING
@@ -170,7 +189,10 @@ public extension CoordinatorType {
     ///    }`
     ///
     func receiveEventFromParent(_ event: CoordinatorEvent) throws {
-        throw CoordinatorError.receiveEventFromParentNotImplementedOnCoordinator(identifier)
+        guard let eventReceiver = self as? EventReceivingCoordinator else {
+            throw CoordinatorError.coordinatorIsNotAnEventReceiver(identifier)
+        }
+        try eventReceiver.receiveEventFromParent(event)
     }
     
     // MARK: - Helpers

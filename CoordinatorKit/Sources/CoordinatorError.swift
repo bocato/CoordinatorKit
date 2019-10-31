@@ -20,11 +20,8 @@ public enum CoordinatorError: Error {
     /// There is no child flow with the expected identifier
     case couldNotFindChildFlowWithIdentifier(String)
     
-    /// The `receiveEvent(:from:)` was not implemented on the coordinatorr
-    case receiveEventFromChildNotImplementedOnCoordinator(String)
-    
-    /// The `receiveEventFromParent` was not implemented on the coordinator
-    case receiveEventFromParentNotImplementedOnCoordinator(String)
+    /// The coordinator does not conform with `EventReceivingCoordinator` protocol
+    case coordinatorIsNotAnEventReceiver(String)
     
 }
 extension CoordinatorError {
@@ -40,13 +37,9 @@ extension CoordinatorError {
             return """
             The expected flow (\(identifier)) is not on the stack/not running.
             """
-        case let .receiveEventFromChildNotImplementedOnCoordinator(named):
+        case let .coordinatorIsNotAnEventReceiver(coordinatorName):
             return """
-            The `receiveEventFromParent` method was not implemented on \(named).
-            """
-        case let .receiveEventFromParentNotImplementedOnCoordinator(named):
-            return """
-            The `receiveEventFromParent` method was not implemented on \(named).
+            \(coordinatorName) does not conform with `EventReceivingCoordinator` protocol.
             """
         }
     }

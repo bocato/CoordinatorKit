@@ -30,20 +30,11 @@ final class CoordinatorErrorTests: XCTestCase {
         XCTAssertEqual(expectedLocalizedDescription, error.localizedDescription)
     }
     
-    func test_receiveEventFromParentNotImplementedOnCoordinator_localizedDescription() {
+    func test_coordinatorIsNotAnEventReceiver_localizedDescription() {
         // Given
         let coordinatorName = "SomeCoordinator"
-        let expectedLocalizedDescription = "The `receiveEventFromParent` method was not implemented on \(coordinatorName)."
-        let error: CoordinatorError = .receiveEventFromParentNotImplementedOnCoordinator(coordinatorName)
-        // When / Then
-        XCTAssertEqual(expectedLocalizedDescription, error.localizedDescription)
-    }
-    
-    func test_receiveEventFromChildNotImplementedOnCoordinator_localizedDescription() {
-        // Given
-        let coordinatorName = "SomeCoordinator"
-        let expectedLocalizedDescription = "The `receiveEventFromParent` method was not implemented on \(coordinatorName)."
-        let error: CoordinatorError = .receiveEventFromChildNotImplementedOnCoordinator(coordinatorName)
+        let expectedLocalizedDescription = "\(coordinatorName) does not conform with `EventReceivingCoordinator` protocol."
+        let error: CoordinatorError = .coordinatorIsNotAnEventReceiver(coordinatorName)
         // When / Then
         XCTAssertEqual(expectedLocalizedDescription, error.localizedDescription)
     }
