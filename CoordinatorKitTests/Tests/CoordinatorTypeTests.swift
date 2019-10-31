@@ -250,8 +250,6 @@ private final class CoordinatorTypeMock: CoordinatorType {
     var parent: CoordinatorType?
     var children: [CoordinatorType]? = []
     func start() {}
-    func receiveEvent(_ event: CoordinatorEvent, from child: CoordinatorType) throws {}
-    func receiveEventFromParent(_ event: CoordinatorEvent) throws {}
 }
 
 private final class OtherCoordinatorTypeMock: CoordinatorType {
