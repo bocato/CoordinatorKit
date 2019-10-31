@@ -23,7 +23,7 @@ private final class MyCoordinator: CoordinatorType {
 
     // MARK: - Properties
     
-    var coordinatorDelegate: CoordinatorDelegate?
+    weak var coordinatorDelegate: CoordinatorDelegate? // Don't forget to define the delegates as weak!
     var parent: CoordinatorType?
     var children: [CoordinatorType]? = []
     
@@ -47,7 +47,7 @@ private final class MyCoordinator: CoordinatorType, EventReceivingCoordinator {
 
     // MARK: - Properties
     
-    var coordinatorDelegate: CoordinatorDelegate?
+    weak var coordinatorDelegate: CoordinatorDelegate? // Don't forget to define the delegates as weak!
     var parent: CoordinatorType?
     var children: [CoordinatorType]? = []
     
