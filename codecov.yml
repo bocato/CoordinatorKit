@@ -26,6 +26,6 @@ comment:
   require_changes: no
 
 ignore:
- - "CoordinatorKitTests/*" # ignore Tests from code coverage
+ - "CoordinatorKitTests/.*" # ignore Tests from code coverage
  - "*Test/.*" # ignore Tests from code coverage
  - "*Tests/.*" # ignore Tests from code coverage
