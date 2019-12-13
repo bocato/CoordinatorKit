@@ -1,4 +1,7 @@
-# CoordinatorKit [![codecov](https://codecov.io/gh/bocato/CoordinatorKit/branch/master/graph/badge.svg)](https://codecov.io/gh/bocato/CoordinatorKit)
+# CoordinatorKit 
+[![codecov](https://codecov.io/gh/bocato/CoordinatorKit/branch/master/graph/badge.svg)](https://codecov.io/gh/bocato/CoordinatorKit)
+[![CodeFactor](https://www.codefactor.io/repository/github/bocato/coordinatorkit/badge)](https://www.codefactor.io/repository/github/bocato/coordinatorkit)
+
 Coordinator pattern extended.
 
 ## Instalation
